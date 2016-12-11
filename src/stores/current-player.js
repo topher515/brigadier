@@ -6,7 +6,7 @@ function set(playerId) {
   currentPlayerIdSingleton = playerId;
 }
 
-function get(playerId) {
+function get() {
   return currentPlayerIdSingleton
 }
 

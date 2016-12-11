@@ -1,17 +1,19 @@
-require('normalize.css/normalize.css');
-require('styles/App.css');
+/* globals firebase */
 
-import _ from 'lodash';
+require('normalize.css/normalize.css');
+require('styles/App.less');
+
 import React from 'react';
 
 let yeomanImage = require('../images/yeoman.png');
 
 import {
-  get as getCurrentPlayerId,
   set as setCurrentPlayerId } from 'stores/current-player.js'
 
 import colorHash from 'lib/colorhash.js';
 
+import GameChooser from './GameChooser.jsx';
+import Game from './Game.jsx';
 
 const database = firebase.database();
 
@@ -45,15 +47,10 @@ class AppComponent extends React.Component {
         <img src={yeomanImage} alt="Yeoman Generator" />
 
         { !this.state.playingGameId
-          ? <GameChooser 
-              onGameIdChoose={this.handleGameIdChoose} 
+          ? <GameChooser
+              onGameIdChoose={this.handleGameIdChoose}
               onRunLogicGameIdChoose={this.handleRunLogicGameIdChoose} />
           : <Game gameId={this.state.playingGameId} />
-        }
-        
-        {
-          !this.state.runningLogicGameId ? null :
-          <GameLogicRunner gameId={this.state.runningLogicGameId} />
         }
 
       </div>

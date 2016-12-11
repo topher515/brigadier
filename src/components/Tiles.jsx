@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import TilesUI from './TilesUI.jsx';
+import TilesUI from './Tiles.ui.jsx';
 
 
 const database = firebase.database();
@@ -22,22 +22,20 @@ class GameChooser extends React.Component {
 
     const { gameId } = this.props;
 
-    this.dbRef = database.ref(`game_state/${gameId}/board/tiles`);
+    this.dbRef = database.ref(`game_states/${gameId}/board/tiles`);
 
-    this.listener = this.dbRef.on('child_changed', ({ key, val })=> {
-
-      this.setState({ [key]: val() });
-
+    this.dbRef.on('value', (snapshot)=> {
+      this.setState(snapshot.val());
     })
 
   }
 
   componentWillUnmount() {
-    this.dbRef.off(this.listener);
+    this.dbRef.off('child_changed', this.listener);
   }
 
   render() {
-    <TilesUI {...this.state} />
+    return <TilesUI {...this.state} />
   }
 }
 

@@ -22,6 +22,7 @@
   "keywords": [],
   "author": "Your name here",
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.0.0",
     "babel-eslint": "^6.0.0",
     "babel-loader": "^6.0.0",
@@ -47,6 +48,8 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-webpack": "^1.7.0",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
     "minimist": "^1.2.0",
     "mocha": "^3.0.0",
     "null-loader": "^0.1.1",
@@ -61,6 +64,7 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "core-js": "^2.0.0",
     "firebase-admin": "^4.0.4",
     "normalize.css": "^4.0.0",

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import GameUI from './GameChooserUI.jsx';
+import GameUI from './Game.ui.jsx';
 
 
 const database = firebase.database();
@@ -26,18 +26,7 @@ class GameChooser extends React.Component {
 
     this.dbRefPlayers = database.ref(`games/${gameId}/players`);
 
-    this.listenerPlayers = this.dbRefPlayers.on('child_added', ({ key, val })=> {
-
-      this.setState((prevState)=> ({
-        players: prevState.players.concat([key])
-      }))
-
-    })
-
-
-    this.dbRefTiles = database.ref(`game_state/${gameId}/tiles`);
-
-    this.listenerTiles = this.dbRefPlayers.on('child_added', ({ key, val })=> {
+    this.listenerPlayers = this.dbRefPlayers.on('child_added', ({ key })=> {
 
       this.setState((prevState)=> ({
         players: prevState.players.concat([key])
@@ -48,11 +37,11 @@ class GameChooser extends React.Component {
   }
 
   componentWillUnmount() {
-    this.dbRefPlayers.off(this.listenerPlayers);
+    this.dbRefPlayers.off('child_added', this.listenerPlayers);
   }
 
   render() {
-    <GameChooserUI {...this.props} games={this.state.games} />
+    return <GameUI {...this.props} players={this.state.players} />;
   }
 }
 

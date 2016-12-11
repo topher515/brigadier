@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import GameChooserUI from './GameChooserUI.jsx';
+import GameChooserUI from './GameChooser.ui.jsx';
 
 import { get as getCurrentPlayerId } from 'stores/current-player.js';
 
@@ -17,11 +17,19 @@ function newBoard({ width, height }) {
     height: height
   };
   
-  _.each(_.range(width), (i)=> (
-    _.each(_.range(height), (j)=> (
-      board.tiles[`${i},${j}`] = { type: 'standard' }
-    ))
-  ))
+  _.each(_.range(width), (i)=> {
+    _.each(_.range(height), (j)=> {
+
+      if (Math.random() > 0.90) {
+        board.tiles[`${i},${j}`] = { type: 'fast' };
+      
+      } else {
+        board.tiles[`${i},${j}`] = { type: 'standard' };
+      }
+
+
+    })
+  })
 
   return board;
 }
@@ -36,39 +44,40 @@ class GameChooser extends React.Component {
     this.state = {
       games: []
     }
+
+    this.handleNewGameMake = this.handleNewGameMake.bind(this);
   }
 
   componentDidMount() {
     this.dbRef = database.ref('games');
-    this.listener = this.dbRef.on('child_added', ({ key, val })=> {
-
+    this.listener = this.dbRef.on('child_added', (snapshot)=> {
       this.setState((prevState) => ({
-        games: prevState.games.concat([{ id:key, ...val()}])
+        games: prevState.games.concat([{ id:snapshot.key, ...snapshot.val()}])
       }));
 
     })
   }
 
   componentWillUnmount() {
-    database.dbRef.off(this.listener);
+    this.dbRef.off('child_added', this.listener);
   }
 
   render() {
-    <GameChooserUI
+    return <GameChooserUI
       {...this.props}
       games={this.state.games}
-      onNewGameMake={this.handleNewGameMake} />
+      onNewGameMake={this.handleNewGameMake} />;
   }
 
   handleNewGameMake() {
     const gameId = this.dbRef.push().key;
 
-    database.update({
+    database.ref().update({
       [`active_games/${gameId}`]: true,
       [`games/${gameId}`]: { players: { [getCurrentPlayerId()]: true } },
       [`game_states/${gameId}`]: {
 
-        board: newBoard({ width:50, height: 50 }),
+        board: newBoard({ width:15, height: 15 }),
         tick: 0
 
       }

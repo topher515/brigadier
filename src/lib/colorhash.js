@@ -11,7 +11,7 @@ function hashStringToColor(str) {
   var r = (hash & 0xFF0000) >> 16;
   var g = (hash & 0x00FF00) >> 8;
   var b = hash & 0x0000FF;
-  return "#" + ("0" + r.toString(16)).substr(-2) + ("0" + g.toString(16)).substr(-2) + ("0" + b.toString(16)).substr(-2);
+  return '#' + ('0' + r.toString(16)).substr(-2) + ('0' + g.toString(16)).substr(-2) + ('0' + b.toString(16)).substr(-2);
 }
 
 export default hashStringToColor;
